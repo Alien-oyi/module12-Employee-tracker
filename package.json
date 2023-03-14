@@ -1,17 +1,24 @@
 {
   "name": "employee-tracker",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "console.table": "^0.10.0",
-    "inquirer": "^9.1.4",
-    "mysql2": "^3.2.0"
-  }
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "inquirer": "^8.0.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.2.0",
+    "nodemon": "^2.0.21",
+    "sequelize": "^6.29.3"
+  },
+  "description": ""
 }

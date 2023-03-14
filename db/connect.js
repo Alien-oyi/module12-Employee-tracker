@@ -1,11 +1,12 @@
 const mysql = require('mysql2');
-
+// require('dotenv').config();
 
 const db = mysql.createConnection({
-    host: 'localhost',   
+    host: 'localhost',
     user: 'root',
     password: 'Qqwwqw123',
     database: 'employee_tracker_db'
 });
 
 module.exports = db;
+
