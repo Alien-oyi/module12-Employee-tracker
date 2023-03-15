@@ -174,8 +174,47 @@ var promptWindows = function () {
             })
         })
         } else if (answers.prompt === 'Update an employee role') {
-            
+            db.query(`SELECT * FROM employee, role WHERE employee.role_id = role.id`, (err, result) => {
+                if (err) throw err;
+                inquirer.prompt([{
+                    type: 'list',
+                    name: 'employee',
+                    message: 'Which employee would you like to update?',
+                    choices: () => {
+                        let choicesArray = [];
+                        for (i = 0; i < result.length; i++) {
+                        let name = `${result[i].first_name} ${result[i].last_name}`;
+                        choicesArray.push(name);
+                        }
+                        return choicesArray;
+                    }
+                    }, {
+                    type: 'list',
+                    name: 'newRole',
+                    message: "What is the his/her new role?",
+                    choices: () => {
+                        let choicesArray = [];
+                        for (i = 0; i < result.length; i++)
+                            {choicesArray.push(result[i].title);}
+                        let uniqueArray = [...new Set(choicesArray)];
+                        return uniqueArray;}
+                    }])
+                    .then((answers) => {
+                         const selectedEmployee = result.find(employee => `${employee.first_name} ${employee.last_name}` === answers.employee);
+                         const selectedRole = result.find(role => role.title === answers.newRole);
+                         db.query(`UPDATE employee SET role_id = ? WHERE id = ?`, [selectedRole.id, selectedEmployee.id], (err, result) => {
+                         if (err) {
+                         console.log('Error:', err);
+                         return promptWindows();
+                         }
+                         console.log('Employee role updated.');
+                         promptWindows();
+                                    });
+                                })
+                            });
+        } else if (answers.prompt === 'Log Out') {
+            db.end();
+            console.log("SEE YOU LATER!")
         }
-         
-    }
-    )}
+    })
+}
