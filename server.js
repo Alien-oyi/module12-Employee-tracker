@@ -12,7 +12,7 @@ var promptWindows = function () {
         type: 'list',
         name: 'prompt',
         message: 'What would you like to do?',
-        choices: ['View All Department', 'View All Roles', 'View All Employees', 'Add a department', 'Add a role', 'Add An Employee', 'update an employee role','Log Out']
+        choices: ['View All Department', 'View All Roles', 'View All Employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role','Log Out']
     }]).then((answers) => {
         if (answers.prompt === 'View All Department') {
             db.query(`SELECT * FROM department`, (err, result) => {
@@ -110,6 +110,72 @@ var promptWindows = function () {
            })                                    
         } 
         )
-        } 
+        } else if (answers.prompt === 'Add an employee') {
+            db.query(`SELECT * FROM employee,role`,(err,result)=>{
+                if (err) throw err;
+                inquirer.prompt([{
+                  type:'input',
+                  name:'firstName',
+                  message:'What is his/her first name?',
+                  validate: firstName =>{
+                    if (firstName) {
+                        return true
+                    } else {
+                        console.log('plz add a first name');
+                        return false
+                    }
+                  }
+                },{
+                    type:'input',
+                  name:'lastName',
+                  message:'What is his/her last name?',
+                  validate: lastName =>{
+                    if (lastName) {
+                        return true
+                    } else {
+                        console.log('plz add a first name');
+                        return false
+                    }
+                  }                    
+                },{
+                   type: 'list',
+                   name: 'role',
+                   message: 'What is the employees role?',
+                   choices: () => {
+                      var array = [];
+                      for (i = 0; i < result.length; i++) {
+                      array.push(result[i].title);}
+                            var newArray = [...new Set(array)];
+                            return newArray;} 
+                },{
+                    type: 'input',
+                    name: 'manager',
+                    message: "What's her/his manager's manager_id?",
+                    validate: managerInput => {
+                        if (managerInput) {
+                            return true;
+                            } else {
+                                console.log('Please Add A manager_id!');
+                                return false;
+                         }
+                    } 
+                }
+            ]).then((answers) => {
+                for (i = 0; i < result.length; i++) {
+                        if (result[i].title === answers.role) {
+                            var role = result[i];
+                        }
+                    }
+                    db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`, [answers.firstName, answers.lastName, role.id, answers.manager], (err, result) => {
+                        if (err) throw err;
+                        console.log("New employee added")
+                        promptWindows();
+            } ) 
+            })
+        })
+        } else if (answers.prompt === 'Update an employee role') {
+            
+        }
+         
     }
     )}
