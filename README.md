@@ -16,6 +16,9 @@
 ## Description
 Staff Monitor App - Keep Track Efficiently
 
+## Walkthough video
+https://drive.google.com/file/d/1GUII9-vNHM_n_l9WcReWvvhj0jhsViwT/view
+
 ## Deployed Link
 None
 
